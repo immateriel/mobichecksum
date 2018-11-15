@@ -102,7 +102,8 @@ int main(int argc, char *argv[]) {
 
 	MD5_Final(digest, &md5);
 
-	for (int i = 0; i < 16; i++)
+	int i;
+	for (i = 0; i < 16; i++)
 		sprintf(&hex_digest[i * 2], "%02x", (unsigned int)digest[i]);
 
 	printf("%s\n", hex_digest);

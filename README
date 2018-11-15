@@ -1,0 +1,13 @@
+Simple checksum generator for mobipocket using https://github.com/bfabiszewski/libmobi
+
+Amazon's kindlegen tool does not generate exactly the same output file from one input file:
+$ kindlegen test.epub -o test.mobi && md5sum test.mobi
+8077dc1aadcc1246d26127a688d2a66c
+$ kindlegen test.epub -o test.mobi && md5sum test.mobi
+8714bbb3dbd550621b9a870306611ac3
+
+This tool circumvents this problem by extracting actual data and generating MD5 from them :
+$ kindlegen test.epub -o test.mobi && mobichecksum test.mobi
+f8644ed54e6e438a2ff9c1b38cbcb2c9
+$ kindlegen test.epub -o test.mobi && mobichecksum test.mobi
+f8644ed54e6e438a2ff9c1b38cbcb2c9

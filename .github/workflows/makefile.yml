@@ -1,0 +1,33 @@
+name: Makefile CI
+
+on:
+  push:
+    tags: ['*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: buildpack-deps:bookworm
+
+    steps:
+      - uses: actions/checkout@v4
+    
+      # Installe les dépendances spécifiques pour construire le binaire
+      - name: Install build tools
+        run: |
+          apt-get update
+          apt-get install -y make gcc libmobi-dev
+
+      # Construit le paquet
+      - name: Build binary and Debian package
+        run: |
+          mkdir -p mobichecksum/usr/bin
+          gcc mobichecksum.c -o mobichecksum/usr/bin/mobichecksum -lmobi -lcrypto
+          dpkg --build mobichecksum/
+
+      # Publie le paquet dans une Release GitHub
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: ./*.deb
